@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace BasicX_O
 {
@@ -24,11 +25,11 @@ namespace BasicX_O
                 return true;
             if ((opts[2].Equals(opts[4])) && (opts[4].Equals(opts[6]))) //right to left diagonal
                 return true;
-            if ((opts[0].Equals(opts[3])) && (opts[3].Equals(opts[6])))
+            if ((opts[0].Equals(opts[3])) && (opts[3].Equals(opts[6]))) //first column
                 return true;
-            if ((opts[1].Equals(opts[4])) && (opts[4].Equals(opts[7])))
+            if ((opts[1].Equals(opts[4])) && (opts[4].Equals(opts[7]))) //middle column
                 return true;
-            if ((opts[2].Equals(opts[5])) && (opts[5].Equals(opts[8])))
+            if ((opts[2].Equals(opts[5])) && (opts[5].Equals(opts[8]))) //last column
                 return true;
 
             return false;
@@ -44,53 +45,65 @@ namespace BasicX_O
                           "          |       |     \n\n");
 
         }
-        static void Main(string[] args)
+        static void Classicgame()
         {
             string[] options = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
             bool wincondition = false;
-            string playermove = "";
+            string playermove;
             bool token = true;
-            int turn=1;
-            while (wincondition != true)
-            {
-                play_sheet(options);
-                if (token == true)
-                    Console.Write("Turn " + turn + "\nPlayer 1(O) input: ");
-                else Console.Write("Turn " + turn + "\nPlayer 2(X) input: ");
-                playermove = Console.ReadLine();
-                while(checkMove(playermove)==false)
+            int turn = 1;
+            int count;
+            while (wincondition == false) 
                 {
-                    Console.Write("Option unavailable!Try another: ");
+                count = 0;
+                    play_sheet(options);
+                    if (token == true)
+                        Console.Write("Turn " + turn + "\nPlayer 1(O) input: ");
+                    else Console.Write("Turn " + turn + "\nPlayer 2(X) input: ");
                     playermove = Console.ReadLine();
-                }
-                if(token==true)
-                options[Int32.Parse(playermove)-1] = "O";
-                else options[Int32.Parse(playermove) - 1] = "X";
+                    while (checkMove(playermove) == false)
+                    {
+                        Console.Write("Option unavailable!Try another: ");
+                        playermove = Console.ReadLine();
+                    }
+                    if (token == true)
+                        options[Int32.Parse(playermove) - 1] = "O";
+                    else options[Int32.Parse(playermove) - 1] = "X";
                 turn++;
                 if (condition(options) == true)
-                    if (token == true)
-                    {
+                        if (token == true)
+                        {
                         wincondition = true;
-                        play_sheet(options);
-                        Console.WriteLine("Player 1 WON!");
-                    }
-                    else
-                    {
+                            play_sheet(options);
+                            Console.WriteLine("Player 1 WON!");
+                        }
+                        else
+                        {
                         wincondition = true;
-                        play_sheet(options);
-                        Console.WriteLine("Player 2 WON!");
-                    }
-                if (turn == 10)
+                            play_sheet(options);
+                            Console.WriteLine("Player 2 WON!");
+                        }
+                for (int i = 0; i < options.Length; i++)
+                    if (options[i] == "O" || options[i] == "X")
+                        count++;
+                if (count == 9 && wincondition != true) 
                 {
+                    Console.Clear();
                     play_sheet(options);
-                    Console.WriteLine(" -Draw- ");
+                    Console.WriteLine(" -DRAW- ");
                     break;
                 }
                 if (turn % 2 == 0)
-                    token = false;
-                else token = true;
+                        token = false;
+                    else token = true;
 
-            }
+               }
         }
+        static void Main(string[] args)
+        {
+            Classicgame();
+        }
+        
+
     }
 }
